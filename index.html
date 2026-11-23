@@ -4,28 +4,37 @@
 button,input{min-height:44px}button{touch-action:manipulation}.tools{display:flex;gap:8px;flex-wrap:wrap}.pad{max-width:100%;min-width:0}.pad span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pad::before{flex:none}
 #empty{color:#cccad0;line-height:1.5}dialog{width:min(520px,calc(100% - 24px));box-sizing:border-box;max-height:85vh;max-height:85dvh;overflow:auto;color:inherit;background:#222326;border:1px solid #4b4c52;border-radius:16px;padding:22px;box-shadow:0 20px 60px #0006}dialog::backdrop{background:#08090bcc}dialog .controlhead{margin-bottom:14px}.edit-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:14px 0;border-top:1px solid #424348}.edit-row label{grid-column:1/-1;color:#c1c0c6;font-size:14px;overflow-wrap:anywhere}.edit-row input{width:100%;border-left:4px solid var(--c)}.remove{color:#ffb5ae}.notice{color:#c6f4a6;min-height:1.3em;font-size:14px;overflow-wrap:anywhere;margin:0}.key:empty{display:none}
 @media(max-width:600px){main,header{padding-inline:14px}.hero{margin-block:20px}.board,.controls{padding:16px}.row{grid-template-columns:20px minmax(0,1fr) auto auto;grid-template-rows:auto 9px;column-gap:9px;row-gap:4px;padding:9px 0 10px}.rank,.name,.time,.share{grid-row:1}.track{grid-column:2/-1;grid-row:2;height:9px}.name{font-size:16px}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pad{justify-content:flex-start;min-height:48px}.key{display:none}.controlhead>.tools{width:100%}.tools button{flex:1}.controls p{line-height:1.45}.foot button{flex:1;padding-inline:8px;font-size:15px}#form input{flex:1 1 135px;width:auto}dialog{padding:16px}.edit-row{grid-template-columns:1fr 1fr}.edit-row input{grid-column:1/-1}.edit-row button{min-height:46px}}
+
+/* Keep the live mixer reachable while the ranking and setup scroll. */
+:root{--mixer-height:12rem;scroll-padding-bottom:calc(var(--mixer-height) + 12px)}
+main{padding-bottom:calc(var(--mixer-height) + 24px)}
+.mixer{position:fixed;z-index:3;bottom:0;inset-inline:0;background:#222427;border-top:1px solid #55585b;box-shadow:0 -8px 24px #0004;padding:10px max(14px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom))}
+.mixer-inner{max-width:950px;margin:auto}.mixer-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.mixer-head h2{font-size:19px}.mixer-head button{font-size:14px}.mixer-help{font-size:14px;color:#ceccd2;margin:0 0 8px}.mixer .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:6px;max-height:clamp(48px,23dvh,190px);overflow-y:auto;overscroll-behavior:contain;padding:3px}.mixer .pad{justify-content:flex-start;min-height:46px}.pad[aria-pressed=true]{color:#17191b;background:var(--c);font-weight:700}.pad[aria-pressed=true]::before{content:"✓";color:#17191b;background:transparent;width:14px;height:auto}.pad[aria-pressed=true] .key{color:#353438}.pad .key{margin-left:auto}.row{font:inherit;text-align:left;padding:0;color:inherit;background:transparent;border:none;border-top:1px solid #36373a;border-radius:0}.row:hover{background:#ffffff07}.row:focus-visible{z-index:1;outline-offset:-2px}.row.on{background:#ffffff05}.controlhead .tools{width:auto}.controls{margin-top:12px}#active-count{color:#bff595;font:14px monospace}
+@media(max-width:600px){.row{padding:9px 0 10px}.mixer .actions{grid-template-columns:repeat(3,minmax(0,1fr))}.mixer .pad{font-size:15px;gap:5px;padding:7px}.mixer-help{margin-bottom:4px}.mixer-head{margin-bottom:2px}.tools button{white-space:nowrap}.controls .tools{width:100%}.mixer{padding-top:6px}.hero{margin-block:15px}}
+@media(max-height:450px){.mixer-help{display:none}.mixer .actions{max-height:52px}}
 </style></head><body>
 <header><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>Linecheck<small>Studio preview</small></header><main>
 <div class="hero"><div class="sleeve" aria-hidden="true"><div class="disc"></div></div><div><div class="eyebrow">Demo track</div><h1>Afterglow</h1><p>LUNEA · Fictional group</p></div></div>
 <section class="board"><div class="boardhead"><h2>Line distribution</h2><div class="transport"><span class="state" id="status">Paused</span><span class="clock" id="clock">00:24.0</span></div></div><div id="chart" class="chart" aria-label="Members ranked by total singing time"></div>
 <p id="empty" hidden>Add your first member to start counting vocals.</p><div class="foot"><button id="play" class="primary">▶ Play demo</button><button id="fresh">Start from zero</button></div></section>
-<section class="controls"><div class="controlhead"><h2>Who's singing?</h2><div class="tools"><button id="manage" aria-haspopup="dialog">Edit members</button><button id="add" aria-expanded="false">＋ Add member</button></div></div><p>Tap a member to switch vocals. Tap again for an instrumental break.</p><div class="actions" id="pads"></div><form id="form" hidden><input id="member" aria-label="Member name" placeholder="Member name" maxlength="30" required><button class="add">Add counter</button></form></section></main>
+<section class="controls"><div class="controlhead"><h2>Members</h2><div class="tools"><button id="manage" aria-haspopup="dialog">Edit members</button><button id="add" aria-expanded="false">＋ Add member</button></div></div><form id="form" hidden><input id="member" aria-label="Member name" placeholder="Member name" maxlength="30" required><button class="add">Add counter</button></form></section></main>
+<section class="mixer" aria-labelledby="mix-title"><div class="mixer-inner"><div class="mixer-head"><h2 id="mix-title">Who's singing? <span id="active-count"></span></h2><button id="clear" type="button">All off</button></div><p class="mixer-help">Tap any singers together. Tap again to stop each one.</p><div class="actions" id="pads" aria-label="Singer toggles"></div></div></section>
 <dialog id="editor" aria-labelledby="editor-title"><div class="controlhead"><h2 id="editor-title">Edit members</h2><button id="done">Done</button></div><p class="notice" id="notice" role="status"></p><div id="roster"></div></dialog>
 <template id="edit-template"><form class="edit-row"><label></label><input type="text" maxlength="30" required><button type="submit">Save name</button><button type="button" class="remove">Delete</button></form></template>
 <script>
 const el=id=>document.getElementById(id);
 const colors=['#d3b8ff','#f7aa92','#b4df99','#8ecde6','#f0d581','#e89fc7'];
-const members=[]; let serial=0; let active=null, running=false, demo=true, elapsed=24, last=0, nextSwitch=27;
+const members=[]; let serial=0; const active=new Set(); let running=false, demo=true, elapsed=24, last=0, nextSwitch=27;
 const sample=[['Yuna',8.3],['Mira',7.7],['Sori',4.5],['Hana',3.5]];
 function addMember(name,seconds,index=serial){
  const id=serial++,color=colors[index%colors.length];
- const row=document.createElement('div');row.className='row';row.style.setProperty('--c',color);
+ const row=document.createElement('button');row.type='button';row.className='row';row.style.setProperty('--c',color);
  row.innerHTML='<span class="rank"></span><span class="name"></span><div class="track"><div class="fill"></div></div><span class="time"></span><span class="share"></span>';
  row.querySelector('.name').textContent=name;el('chart').append(row);
  const pad=document.createElement('button');pad.className='pad';pad.style.setProperty('--c',color);const caption=document.createElement('span'),key=document.createElement('span');
  caption.textContent=name;key.className='key';pad.append(caption,key);el('pads').append(pad);
  const member={id,index,name,seconds,row,pad,caption,key,rank:row.children[0],fill:row.querySelector('.fill'),time:row.children[3],share:row.children[4]};
- pad.onclick=()=>select(member);members.push(member);syncRoster();
+ row.onclick=pad.onclick=()=>select(member);members.push(member);syncRoster();
 }
 function syncRoster(){
  members.forEach((m,i)=>m.key.textContent=i<9?String(i+1):'');
@@ -34,14 +43,18 @@ function syncRoster(){
 }
 function save(){
  const roster=members.map(({name,seconds,index})=>({name,seconds,index}));
- try{localStorage.setItem('linecheck.take.v1',JSON.stringify({roster,elapsed,demo,nextSwitch,active:members.indexOf(active),serial}))}catch{}
+ try{localStorage.setItem('linecheck.take.v1',JSON.stringify({roster,elapsed,demo,nextSwitch,active:[...active].map(member=>members.indexOf(member)),serial}))}catch{}
 }
 function restore(){
  try{
   const data=JSON.parse(localStorage.getItem('linecheck.take.v1'));
   if(!data||!Array.isArray(data.roster)||!data.roster.every(m=>typeof m.name==='string'&&m.name.trim()&&Number.isFinite(m.seconds)&&m.seconds>=0&&Number.isInteger(m.index)&&m.index>=0)||!Number.isFinite(data.elapsed)||data.elapsed<0)return false;
   data.roster.forEach(m=>addMember(m.name,m.seconds,m.index));serial=Math.max(serial,Number.isSafeInteger(data.serial)?data.serial:0);
-  elapsed=data.elapsed;active=members[data.active]||null;nextSwitch=data.nextSwitch;demo=Boolean(data.demo&&active&&nextSwitch>elapsed);return true;
+  elapsed=data.elapsed;
+  const saved=Array.isArray(data.active)?data.active:[data.active];
+  saved.forEach(i=>{if(Number.isInteger(i)&&members[i])active.add(members[i])});
+  nextSwitch=data.nextSwitch;
+  demo=Boolean(data.demo&&active.size===1&&Number.isFinite(nextSwitch)&&nextSwitch>elapsed);return true;
  }catch{return false}
 }
 function editMembers(){
@@ -61,7 +74,7 @@ function editMembers(){
   remove.onclick=()=>{
    if(!window.confirm('Delete '+m.name+' and their counter?'))return;
    advance(performance.now());
-   if(active===m){active=null;demo=false}
+   if(active.delete(m))demo=false;
    members.splice(members.indexOf(m),1);m.row.remove();m.pad.remove();form.remove();
    if(!members.length){running=false;elapsed=0;demo=false;el('editor').close();el('add').focus()}
    else{el('notice').textContent=m.name+' deleted.';el('done').focus()}
@@ -72,27 +85,57 @@ function editMembers(){
 }
 el('manage').onclick=()=>{el('notice').textContent='';editMembers();el('editor').showModal()};
 el('done').onclick=()=>el('editor').close();
+function credit(seconds){
+ for(const member of active)member.seconds+=seconds;
+ elapsed+=seconds;
+}
 function advance(now){
  if(!running)return;
- let delta=(now-last)/1000;last=now;
- while(demo && elapsed+delta>=nextSwitch){const portion=nextSwitch-elapsed;active.seconds+=portion;delta-=portion;elapsed=nextSwitch;active=members[(members.indexOf(active)+1)%members.length];nextSwitch+=5}
- if(active!==null)active.seconds+=delta;elapsed+=delta;
+ let delta=Math.max(0,(now-last)/1000);
+ last=Math.max(last,now);
+ while(demo && elapsed+delta>=nextSwitch){
+  const portion=nextSwitch-elapsed;
+  credit(portion);
+  delta-=portion;
+  const current=active.values().next().value;
+  active.clear();
+  active.add(members[(members.indexOf(current)+1)%members.length]);
+  nextSwitch+=5;
+ }
+ credit(delta);
 }
-function select(id){const now=performance.now();advance(now);active=running&&active===id?null:id;demo=false;running=true;last=now;draw();save()}
+function select(member){
+ const now=performance.now();advance(now);
+ if(demo&&!running)active.clear();
+ demo=false;
+ if(active.has(member))active.delete(member);else active.add(member);
+ if(active.size)running=true;
+ last=now;draw();save();
+}
+el('clear').onclick=()=>{
+ advance(performance.now());active.clear();demo=false;draw();save();
+};
 function draw(){
  const order=[...members].sort((a,b)=>b.seconds-a.seconds||a.id-b.id);
  const total=members.reduce((sum,m)=>sum+m.seconds,0),scale=Math.max(10,Math.ceil((order[0]?.seconds??0)/10)*10);
- order.forEach((m,i)=>{const live=running&&m===active;m.row.style.transform='translateY('+i*62+'px)';m.row.classList.toggle('on',live);m.rank.textContent=String(i+1).padStart(2,'0');m.fill.style.width=(m.seconds/scale*100)+'%';m.time.textContent=m.seconds.toFixed(1)+'s';m.share.textContent=(total?m.seconds/total*100:0).toFixed(1)+'%';m.pad.setAttribute('aria-pressed',String(live))});
+ order.forEach((m,i)=>{const live=running&&active.has(m);m.row.style.transform='translateY('+i*62+'px)';m.row.classList.toggle('on',live);m.rank.textContent=String(i+1).padStart(2,'0');m.fill.style.width=(m.seconds/scale*100)+'%';m.time.textContent=m.seconds.toFixed(1)+'s';m.share.textContent=(total?m.seconds/total*100:0).toFixed(1)+'%';const selected=active.has(m)&&(!demo||running);m.pad.setAttribute('aria-pressed',String(selected));m.row.setAttribute('aria-pressed',String(selected));m.row.setAttribute('aria-label',m.name+', '+m.time.textContent+', '+m.share.textContent)});
+ const selectedCount=demo&&!running?0:active.size;
+ el('clear').disabled=!selectedCount;
+ el('active-count').textContent=selectedCount?selectedCount+' selected':'';
  el('clock').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+(elapsed%60).toFixed(1).padStart(4,'0');
- el('status').textContent=running?(demo?'Demo playing':active===null?'Instrumental':'Recording'):'Paused';
+ el('status').textContent=running?(demo?'Demo playing':active.size===0?'Instrumental':'Recording'):'Paused';
  el('play').textContent=running?'Ⅱ Pause':demo?'▶ Play demo':'▶ Resume';
 }
 el('play').onclick=()=>{let now=performance.now();advance(now);running=!running;last=now;draw();save()};
-el('fresh').onclick=()=>{running=false;demo=false;elapsed=0;active=null;members.forEach(m=>m.seconds=0);draw();save()};
+el('fresh').onclick=()=>{running=false;demo=false;elapsed=0;active.clear();members.forEach(m=>m.seconds=0);draw();save()};
 el('add').onclick=()=>{const form=el('form');form.hidden=!form.hidden;el('add').setAttribute('aria-expanded',String(!form.hidden));if(!form.hidden)el('member').focus()};
 el('form').onsubmit=e=>{e.preventDefault();const input=el('member');if(!input.value.trim())return;advance(performance.now());addMember(input.value.trim(),0);input.value='';input.focus();draw();save()};
 document.addEventListener('keydown',e=>{if(el('editor').open||e.target.tagName==='INPUT'||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;const id=Number(e.key)-1;if(/^[1-9]$/.test(e.key)&&members[id])select(members[id])});
-if(!restore()){sample.forEach(([name,seconds])=>addMember(name,seconds));active=members[1]}syncRoster();draw();
+if(!restore()){sample.forEach(([name,seconds])=>addMember(name,seconds));active.add(members[1])}syncRoster();draw();
+const mixer=document.querySelector('.mixer');
+function reserveMixerSpace(){document.documentElement.style.setProperty('--mixer-height',mixer.offsetHeight+'px')}
+reserveMixerSpace();
+new ResizeObserver(reserveMixerSpace).observe(mixer);
 document.addEventListener('visibilitychange',()=>{if(document.hidden){advance(performance.now());save()}});
 window.addEventListener('pagehide',()=>{advance(performance.now());save()});
 function tick(now){if(running){advance(now);draw()}requestAnimationFrame(tick)}requestAnimationFrame(tick);
