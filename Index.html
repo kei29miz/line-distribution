@@ -1,0 +1,146 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Linecheck · Line distribution</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#161719;color:#f5f3ed;font:16px Inter,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer;color:inherit;border:1px solid #44464b;border-radius:7px;background:#27292d;padding:10px 15px}button:hover{border-color:#bfb8e7}button:focus-visible,input:focus-visible{outline:3px solid #c8b8ff;outline-offset:3px}header,main{max-width:1120px;margin:auto;padding:0 5vw}header{height:75px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #37383b;font-size:21px;font-weight:750;letter-spacing:-1px}.mark{display:inline-flex;align-items:center;gap:3px;height:24px}.mark i{background:#bff595;width:4px;border-radius:2px;height:12px}.mark i:nth-child(2){height:24px}.mark i:nth-child(3){height:17px}header small{margin-left:auto;color:#c0bfc4;font:14px monospace;letter-spacing:0}main{padding-bottom:40px}.hero{display:flex;align-items:center;gap:21px;margin:36px 0}.sleeve{width:92px;height:92px;position:relative;overflow:hidden;background:linear-gradient(145deg,#c7b9ff,#ffbeac);border-radius:6px;flex:none}.disc{position:absolute;inset:-15px -40px 3px 18px;border-radius:50%;background:radial-gradient(circle,#17171b 0 4%,#d1b7ff 5% 19%,transparent 20%),repeating-radial-gradient(circle,#3a3741 0 2px,#19191d 3px 5px)}.eyebrow{color:#bbb9c1;font:13px monospace;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(36px,5vw,65px);line-height:1;letter-spacing:-.065em;margin:5px 0}.hero p{color:#c4c2c9;margin:8px 0 0}.board,.controls{border:1px solid #393a3e;background:#1f2023;border-radius:13px;padding:clamp(17px,3vw,32px)}.boardhead,.foot,.actions,.controlhead,form,.transport{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.boardhead,.controlhead,.foot{justify-content:space-between}h2{margin:0;font-size:23px;letter-spacing:-.045em}.clock,.rank,.time,.share,.key,.state{font-family:Consolas,monospace;font-variant-numeric:tabular-nums}.clock{font-size:22px;color:#c4f5a6}.state{color:#c3c0c8;font-size:13px}.chart{position:relative;margin:24px 0 14px;transition:height .25s}.row{position:absolute;left:0;top:0;width:100%;height:62px;display:grid;grid-template-columns:32px minmax(64px,110px) minmax(20px,1fr) 75px 56px;align-items:center;gap:12px;border-top:1px solid #36373a;transition:transform .45s cubic-bezier(.2,.8,.2,1)}.rank{color:#aaa8ae;font-size:14px}.name{font-size:18px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track{height:17px;background:#2c2d30;border-radius:3px;overflow:hidden}.fill{height:100%;background:var(--c);border-radius:3px;width:0}.time,.share{text-align:right}.time{font-size:20px}.share{color:#c1bec6;font-size:14px}.on .name{color:var(--c)}.on .fill{background:repeating-linear-gradient(115deg,transparent 0 7px,#ffffff33 8px 10px),var(--c);background-size:24px 100%;animation:move 1.4s linear infinite}@keyframes move{to{background-position:24px 0}}.foot{border-top:1px solid #3a3b40;padding-top:17px}.primary{background:#c6f4a6;color:#192215;font-weight:700;border-color:transparent}.controls{margin-top:16px}.controls p{margin:7px 0 20px;color:#c1c0c6}.pad{display:inline-flex;align-items:center;gap:9px;min-height:45px}.pad::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c)}.pad[aria-pressed=true]{border-color:var(--c);background:#343439}.key{color:#b4b2b8;font-size:13px}.extra{display:flex;align-items:center;gap:8px}input{color:#fff;background:#161719;padding:10px 11px;border:1px solid #505156;border-radius:6px;width:165px;min-width:0}.add{background:#353338}button:disabled{opacity:.5;cursor:default}form{margin-top:16px}form[hidden]{display:none}@media(max-width:600px){header{height:58px}.hero{margin:24px 0;gap:14px}.sleeve{width:68px;height:68px}.row{grid-template-columns:18px minmax(46px,66px) minmax(14px,1fr) 51px 44px;gap:6px}.name,.time{font-size:15px}.share,.rank{font-size:12px}.track{height:13px}.boardhead{align-items:flex-start}h2{font-size:20px}.clock{font-size:18px}.transport{gap:5px}.chart{margin-top:18px}.pad{padding:8px 10px}.controlhead button{padding:8px 10px}}@media(prefers-reduced-motion:reduce){*,*::before{transition:none!important;animation:none!important}}
+button,input{min-height:44px}button{touch-action:manipulation}.tools{display:flex;gap:8px;flex-wrap:wrap}.pad{max-width:100%;min-width:0}.pad span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pad::before{flex:none}
+#empty{color:#cccad0;line-height:1.5}dialog{width:min(520px,calc(100% - 24px));box-sizing:border-box;max-height:85vh;max-height:85dvh;overflow:auto;color:inherit;background:#222326;border:1px solid #4b4c52;border-radius:16px;padding:22px;box-shadow:0 20px 60px #0006}dialog::backdrop{background:#08090bcc}dialog .controlhead{margin-bottom:14px}.edit-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:14px 0;border-top:1px solid #424348}.edit-row label{grid-column:1/-1;color:#c1c0c6;font-size:14px;overflow-wrap:anywhere}.edit-row input{width:100%;border-left:4px solid var(--c)}.remove{color:#ffb5ae}.notice{color:#c6f4a6;min-height:1.3em;font-size:14px;overflow-wrap:anywhere;margin:0}.key:empty{display:none}
+@media(max-width:600px){main,header{padding-inline:14px}.hero{margin-block:20px}.board,.controls{padding:16px}.row{grid-template-columns:20px minmax(0,1fr) auto auto;grid-template-rows:auto 9px;column-gap:9px;row-gap:4px;padding:9px 0 10px}.rank,.name,.time,.share{grid-row:1}.track{grid-column:2/-1;grid-row:2;height:9px}.name{font-size:16px}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pad{justify-content:flex-start;min-height:48px}.key{display:none}.controlhead>.tools{width:100%}.tools button{flex:1}.controls p{line-height:1.45}.foot button{flex:1;padding-inline:8px;font-size:15px}#form input{flex:1 1 135px;width:auto}dialog{padding:16px}.edit-row{grid-template-columns:1fr 1fr}.edit-row input{grid-column:1/-1}.edit-row button{min-height:46px}}
+
+/* Keep the live mixer reachable while the ranking and setup scroll. */
+:root{--mixer-height:12rem;scroll-padding-bottom:calc(var(--mixer-height) + 12px)}
+main{padding-bottom:calc(var(--mixer-height) + 24px)}
+.mixer{position:fixed;z-index:3;bottom:0;inset-inline:0;background:#222427;border-top:1px solid #55585b;box-shadow:0 -8px 24px #0004;padding:10px max(14px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom))}
+.mixer-inner{max-width:950px;margin:auto}.mixer-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.mixer-head h2{font-size:19px}.mixer-head button{font-size:14px}.mixer-help{font-size:14px;color:#ceccd2;margin:0 0 8px}.mixer .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(116px,1fr));gap:6px;max-height:clamp(48px,23dvh,190px);overflow-y:auto;overscroll-behavior:contain;padding:3px}.mixer .pad{justify-content:flex-start;min-height:46px}.pad[aria-pressed=true]{color:#17191b;background:var(--c);font-weight:700}.pad[aria-pressed=true]::before{content:"✓";color:#17191b;background:transparent;width:14px;height:auto}.pad[aria-pressed=true] .key{color:#353438}.pad .key{margin-left:auto}.row{font:inherit;text-align:left;padding:0;color:inherit;background:transparent;border:none;border-top:1px solid #36373a;border-radius:0}.row:hover{background:#ffffff07}.row:focus-visible{z-index:1;outline-offset:-2px}.row.on{background:#ffffff05}.controlhead .tools{width:auto}.controls{margin-top:12px}#active-count{color:#bff595;font:14px monospace}
+@media(max-width:600px){.row{padding:9px 0 10px}.mixer .actions{grid-template-columns:repeat(3,minmax(0,1fr))}.mixer .pad{font-size:15px;gap:5px;padding:7px}.mixer-help{margin-bottom:4px}.mixer-head{margin-bottom:2px}.tools button{white-space:nowrap}.controls .tools{width:100%}.mixer{padding-top:6px}.hero{margin-block:15px}}
+@media(max-height:450px){.mixer-help{display:none}.mixer .actions{max-height:52px}}
+</style></head><body>
+<header><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>Linecheck<small>Studio preview</small></header><main>
+<div class="hero"><div class="sleeve" aria-hidden="true"><div class="disc"></div></div><div><div class="eyebrow">Demo track</div><h1>Afterglow</h1><p>LUNEA · Fictional group</p></div></div>
+<section class="board"><div class="boardhead"><h2>Line distribution</h2><div class="transport"><span class="state" id="status">Paused</span><span class="clock" id="clock">00:24.0</span></div></div><div id="chart" class="chart" aria-label="Members ranked by total singing time"></div>
+<p id="empty" hidden>Add your first member to start counting vocals.</p><div class="foot"><button id="play" class="primary">▶ Play demo</button><button id="fresh">Start from zero</button></div></section>
+<section class="controls"><div class="controlhead"><h2>Members</h2><div class="tools"><button id="manage" aria-haspopup="dialog">Edit members</button><button id="add" aria-expanded="false">＋ Add member</button></div></div><form id="form" hidden><input id="member" aria-label="Member name" placeholder="Member name" maxlength="30" required><button class="add">Add counter</button></form></section></main>
+<section class="mixer" aria-labelledby="mix-title"><div class="mixer-inner"><div class="mixer-head"><h2 id="mix-title">Who's singing? <span id="active-count"></span></h2><button id="clear" type="button">All off</button></div><p class="mixer-help">Tap any singers together. Tap again to stop each one.</p><div class="actions" id="pads" aria-label="Singer toggles"></div></div></section>
+<dialog id="editor" aria-labelledby="editor-title"><div class="controlhead"><h2 id="editor-title">Edit members</h2><button id="done">Done</button></div><p class="notice" id="notice" role="status"></p><div id="roster"></div></dialog>
+<template id="edit-template"><form class="edit-row"><label></label><input type="text" maxlength="30" required><button type="submit">Save name</button><button type="button" class="remove">Delete</button></form></template>
+<script>
+const el=id=>document.getElementById(id);
+const colors=['#d3b8ff','#f7aa92','#b4df99','#8ecde6','#f0d581','#e89fc7'];
+const members=[]; let serial=0; const active=new Set(); let running=false, demo=true, elapsed=24, last=0, nextSwitch=27;
+const sample=[['Yuna',8.3],['Mira',7.7],['Sori',4.5],['Hana',3.5]];
+function addMember(name,seconds,index=serial,completedSeconds=seconds){
+ const id=serial++,color=colors[index%colors.length];
+ const row=document.createElement('button');row.type='button';row.className='row';row.style.setProperty('--c',color);
+ row.innerHTML='<span class="rank"></span><span class="name"></span><div class="track"><div class="fill"></div></div><span class="time"></span><span class="share"></span>';
+ row.querySelector('.name').textContent=name;el('chart').append(row);
+ const pad=document.createElement('button');pad.className='pad';pad.style.setProperty('--c',color);const caption=document.createElement('span'),key=document.createElement('span');
+ caption.textContent=name;key.className='key';pad.append(caption,key);el('pads').append(pad);
+ const member={id,index,name,seconds,completedSeconds,row,pad,caption,key,rank:row.children[0],fill:row.querySelector('.fill'),time:row.children[3],share:row.children[4]};
+ row.onclick=pad.onclick=()=>select(member);members.push(member);syncRoster();
+}
+function syncRoster(){
+ members.forEach((m,i)=>m.key.textContent=i<9?String(i+1):'');
+ el('chart').style.height=members.length*62+'px';el('empty').hidden=members.length>0;
+ for(const id of ['manage','play','fresh'])el(id).disabled=!members.length;
+}
+function save(){
+ const roster=members.map(({name,seconds,index,completedSeconds})=>({name,seconds,index,completedSeconds}));
+ try{localStorage.setItem('linecheck.take.v1',JSON.stringify({roster,elapsed,demo,nextSwitch,active:[...active].map(member=>members.indexOf(member)),serial}))}catch{}
+}
+function restore(){
+ try{
+  const data=JSON.parse(localStorage.getItem('linecheck.take.v1'));
+  if(!data||!Array.isArray(data.roster)||!data.roster.every(m=>typeof m.name==='string'&&m.name.trim()&&Number.isFinite(m.seconds)&&m.seconds>=0&&Number.isInteger(m.index)&&m.index>=0)||!Number.isFinite(data.elapsed)||data.elapsed<0)return false;
+  data.roster.forEach(m=>addMember(m.name,m.seconds,m.index,Number.isFinite(m.completedSeconds)&&m.completedSeconds>=0&&m.completedSeconds<=m.seconds?m.completedSeconds:m.seconds));serial=Math.max(serial,Number.isSafeInteger(data.serial)?data.serial:0);
+  elapsed=data.elapsed;
+  const saved=Array.isArray(data.active)?data.active:[data.active];
+  saved.forEach(i=>{if(Number.isInteger(i)&&members[i])active.add(members[i])});
+  nextSwitch=data.nextSwitch;
+  demo=Boolean(data.demo&&active.size===1&&Number.isFinite(nextSwitch)&&nextSwitch>elapsed);return true;
+ }catch{return false}
+}
+function editMembers(){
+ const list=el('roster');list.replaceChildren();
+ for(const m of members){
+  const form=el('edit-template').content.firstElementChild.cloneNode(true);
+  const input=form.querySelector('input'),label=form.querySelector('label'),remove=form.querySelector('.remove');
+  input.id='name-'+m.id;input.value=m.name;label.htmlFor=input.id;label.textContent=m.name;
+  form.style.setProperty('--c',colors[m.index%colors.length]);
+  remove.setAttribute('aria-label','Delete '+m.name);
+  form.onsubmit=e=>{
+   e.preventDefault();const name=input.value.trim();
+   if(!name){input.setCustomValidity('Enter a member name.');input.reportValidity();return}
+   m.name=name;input.value=name;m.caption.textContent=name;m.row.querySelector('.name').textContent=name;label.textContent=name;remove.setAttribute('aria-label','Delete '+name);save();el('notice').textContent='Name saved.';
+  };
+  input.oninput=()=>input.setCustomValidity('');
+  remove.onclick=()=>{
+   if(!window.confirm('Delete '+m.name+' and their counter?'))return;
+   advance(performance.now());
+   if(active.delete(m))demo=false;
+   members.splice(members.indexOf(m),1);m.row.remove();m.pad.remove();form.remove();
+   if(!members.length){running=false;elapsed=0;demo=false;el('editor').close();el('add').focus()}
+   else{el('notice').textContent=m.name+' deleted.';el('done').focus()}
+   syncRoster();draw();save();
+  };
+  list.append(form);
+ }
+}
+el('manage').onclick=()=>{el('notice').textContent='';editMembers();el('editor').showModal()};
+el('done').onclick=()=>el('editor').close();
+function finishLine(member){
+ member.completedSeconds=member.seconds;
+ active.delete(member);
+}
+function credit(seconds){
+ for(const member of active)member.seconds+=seconds;
+ elapsed+=seconds;
+}
+function advance(now){
+ if(!running)return;
+ let delta=Math.max(0,(now-last)/1000);
+ last=Math.max(last,now);
+ while(demo && elapsed+delta>=nextSwitch){
+  const portion=nextSwitch-elapsed;
+  credit(portion);
+  delta-=portion;
+  const current=active.values().next().value;
+  finishLine(current);
+  active.add(members[(members.indexOf(current)+1)%members.length]);
+  nextSwitch+=5;
+ }
+ credit(delta);
+}
+function select(member){
+ const now=performance.now();advance(now);
+ if(demo&&!running)active.forEach(finishLine);
+ demo=false;
+ if(active.has(member))finishLine(member);else active.add(member);
+ if(active.size)running=true;
+ last=now;draw();save();
+}
+el('clear').onclick=()=>{
+ advance(performance.now());active.forEach(finishLine);demo=false;draw();save();
+};
+function draw(){
+ const order=[...members].sort((a,b)=>b.completedSeconds-a.completedSeconds||a.id-b.id);
+ const total=members.reduce((sum,m)=>sum+m.seconds,0),scale=Math.max(10,Math.ceil(members.reduce((max,m)=>Math.max(max,m.seconds),0)/10)*10);
+ order.forEach((m,i)=>{const live=running&&active.has(m);m.row.style.transform='translateY('+i*62+'px)';m.row.classList.toggle('on',live);m.rank.textContent=String(i+1).padStart(2,'0');m.fill.style.width=(m.seconds/scale*100)+'%';m.time.textContent=m.seconds.toFixed(1)+'s';m.share.textContent=(total?m.seconds/total*100:0).toFixed(1)+'%';const selected=active.has(m)&&(!demo||running);m.pad.setAttribute('aria-pressed',String(selected));m.row.setAttribute('aria-pressed',String(selected));m.row.setAttribute('aria-label',m.name+', '+m.time.textContent+', '+m.share.textContent)});
+ const selectedCount=demo&&!running?0:active.size;
+ el('clear').disabled=!selectedCount;
+ el('active-count').textContent=selectedCount?selectedCount+' selected':'';
+ el('clock').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+(elapsed%60).toFixed(1).padStart(4,'0');
+ el('status').textContent=running?(demo?'Demo playing':active.size===0?'Instrumental':'Recording'):'Paused';
+ el('play').textContent=running?'Ⅱ Pause':demo?'▶ Play demo':'▶ Resume';
+}
+el('play').onclick=()=>{let now=performance.now();advance(now);running=!running;last=now;draw();save()};
+el('fresh').onclick=()=>{running=false;demo=false;elapsed=0;active.clear();members.forEach(m=>{m.seconds=0;m.completedSeconds=0});draw();save()};
+el('add').onclick=()=>{const form=el('form');form.hidden=!form.hidden;el('add').setAttribute('aria-expanded',String(!form.hidden));if(!form.hidden)el('member').focus()};
+el('form').onsubmit=e=>{e.preventDefault();const input=el('member');if(!input.value.trim())return;advance(performance.now());addMember(input.value.trim(),0);input.value='';input.focus();draw();save()};
+document.addEventListener('keydown',e=>{if(el('editor').open||e.target.tagName==='INPUT'||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;const id=Number(e.key)-1;if(/^[1-9]$/.test(e.key)&&members[id])select(members[id])});
+if(!restore()){sample.forEach(([name,seconds])=>addMember(name,seconds));active.add(members[1])}syncRoster();draw();
+const mixer=document.querySelector('.mixer');
+function reserveMixerSpace(){document.documentElement.style.setProperty('--mixer-height',mixer.offsetHeight+'px')}
+reserveMixerSpace();
+new ResizeObserver(reserveMixerSpace).observe(mixer);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){advance(performance.now());save()}});
+window.addEventListener('pagehide',()=>{advance(performance.now());save()});
+function tick(now){if(running){advance(now);draw()}requestAnimationFrame(tick)}requestAnimationFrame(tick);
+</script></body></html>
